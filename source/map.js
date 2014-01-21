@@ -30,5 +30,9 @@ function placeCircle(location) {
 	google.maps.event.addListener(newCircle, 'rightclick', function(event) {
         this.setMap(null);
     });
+	google.maps.event.addListener(newCircle, 'click', function(event) {
+		placeCircle(event.latLng);
+	});
+
 }
 google.maps.event.addDomListener(window, 'load', initialize);

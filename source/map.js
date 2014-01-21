@@ -15,6 +15,11 @@ function initialize() {
 }
 function placeCircle(location) {
 	var pos = new google.maps.LatLng(location);
+	var unitArray = [3963.1676,6378.1,6378100];
+	var radius = parseFloat(document.getElementById("radius").value);
+	var selectedUnit = document.getElementById("units").selectedIndex;
+	radius = radius / unitArray[selectedUnit] * unitArray[2];
+	
 	var circle = {
 			strokeColor: '#FF0000',
 			strokeOpacity: 0.8,
@@ -23,7 +28,7 @@ function placeCircle(location) {
 			fillOpacity: 0.35,
 			map: map,
 			center: location,
-			radius: 3900,
+			radius: radius,
 			clickable: true,
 		};	
 	newCircle = new google.maps.Circle(circle);	

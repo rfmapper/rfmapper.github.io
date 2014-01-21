@@ -13,12 +13,23 @@
 				margin: 0px;
 				padding: 0px;
 			}
+			
+			form#options { position: absolute; bottom: 5px; left: 100px; background: #fff; border: 1px solid #666; padding: 3px 5px; }
+			form#options em { margin: 0 10px; color: #666; }
 		</style> 
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 		<script src="./source/map.js"></script>
   </head>
   <body>
     <div id="map-canvas"></div>
+	<form id="options">
+		<label for="radius">Radius</label><input type="text" value="1" id="radius" name="radius" />
+		<label for="units">Units</label> <select id="units" name="units">
+            <option value="mi">Miles</option>
+            <option value="km">Kilometers</option>
+		</select>
+		<em>Click the map to place a circle, right-click to remove a circle</em>
+	</form>
   </body>
 </html>
 </html>

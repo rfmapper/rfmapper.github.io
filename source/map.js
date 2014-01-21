@@ -19,12 +19,13 @@ function placeCircle(location) {
 	var radius = parseFloat(document.getElementById("radius").value);
 	var selectedUnit = document.getElementById("units").selectedIndex;
 	radius = radius / unitArray[selectedUnit] * unitArray[2];
+	var color = document.getElementById("color").value;
 	
 	var circle = {
-			strokeColor: '#FF0000',
+			strokeColor: color,
 			strokeOpacity: 0.8,
 			strokeWeight: 2,
-			fillColor: '#FF0000',
+			fillColor: color,
 			fillOpacity: 0.35,
 			map: map,
 			center: location,

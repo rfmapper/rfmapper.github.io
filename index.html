@@ -13,11 +13,17 @@
 				margin: 0px;
 				padding: 0px;
 			}
-			
-			form#options { position: absolute; bottom: 5px; left: 100px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
+			body { 
+				font-family: Helvetica, Arial, sans-serif; 
+				font-size: 12px; 
+			}
+
+			form#options { position: absolute; bottom: 15px; left: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
 			form#options em { margin: 0 10px; color: #666; }
-			form#options label { padding: 2px 0px; }
+			
+			form#location { position: absolute; bottom: 15px; right: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
 		</style> 
+		<script type="text/javascript" src="./source/jscolor/jscolor.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 		<script src="./source/map.js"></script>
   </head>
@@ -29,8 +35,17 @@
             <option value="mi">Miles</option>
             <option value="km">Kilometers</option>
 		</select>
-		<label for="color">Color </label><input type="color" value="#FF0000" id="color" name="color"/>
+		<label for="color">Color </label><input class="color" value="#FF0000" id="color" name="color" size=7/>
+		<label for="tag">Tag </label><input type="text" value="default" id="tag" name="tag" size=10/>
 		<em>Click the map to place a circle, right-click to remove a circle</em>
+	</form>
+	<form id="location">
+		<label for="type" id='latlong'></label> <select onclick="OptionsChanged();" id="type" name="type">
+			<option value="numeric">d.ddd d.ddd</option>
+			<option value="d">NS d.ddd EW d.ddd</option>
+			<option value="dm">NS d m.mmm' EW d m.mmm'</option>
+			<option value="dms">NS d m' s" EW d m' s"</option>
+		</select>	
 	</form>
   </body>
 </html>

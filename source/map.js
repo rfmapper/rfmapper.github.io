@@ -8,6 +8,15 @@ function initialize() {
 	zoom: 10,
 	center: new google.maps.LatLng(33.450, -112.0667),
 	draggableCursor: 'default',
+	styles:
+	[	
+	  {
+		"featureType": "poi",
+		"stylers": [
+		  { "visibility": "off" }
+		]
+	  }
+	]
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 	  mapOptions); 	
@@ -70,6 +79,13 @@ function placeCircle(location) {
 		map: map,
 		title: document.getElementById("tag").value,
 	});
+	marker.circle = newCircle;
+	
+	google.maps.event.addListener(marker, 'rightclick', function(event) {
+		this.circle.setMap(null);
+        this.setMap(null);
+	});
+	
 	newCircle.marker = marker;
 }
 

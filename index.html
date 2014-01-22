@@ -19,9 +19,14 @@
 			}
 
 			form#options { position: absolute; bottom: 15px; left: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
-			form#options em { margin: 0 10px; color: #666; }
+			form#options label { padding: 0px 5px; }
+			
+			form#options2 { position: absolute; bottom: 60px; left: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
+			form#options2 label { padding: 0px 5px; }
 			
 			form#location { position: absolute; bottom: 15px; right: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
+			form#location label { padding: 10px 10px; }
+			form#location em { margin: 0 10px; color: #666; }
 		</style> 
 		<script type="text/javascript" src="./source/jscolor/jscolor.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
@@ -30,17 +35,21 @@
   <body>
     <div id="map-canvas"></div>
 	<form id="options">
-		<label for="radius">Radius </label><input type="text" value="5" id="radius" name="radius" />
+		<label for="radius">Radius </label><input type="text" value="5" id="radius" name="radius" size=5/>
 		<label for="units">Units </label> <select id="units" name="units">
             <option value="mi">Miles</option>
             <option value="km">Kilometers</option>
 		</select>
+	</form>
+	<form id="options2">
 		<label for="color">Color </label><input class="color" value="#FF0000" id="color" name="color" size=7/>
-		<label for="tag">Tag </label><input type="text" value="default" id="tag" name="tag" size=10/>
-		<em>Click the map to place a circle, right-click to remove a circle</em>
+		<label for="tag">Tag </label><input type="text" value="undefined" id="tag" name="tag" size=10/>
 	</form>
 	<form id="location">
-		<label for="type" id='latlong'></label> <select onclick="OptionsChanged();" id="type" name="type">
+		<em>Click the map to place a circle, right-click to remove a circle</em>
+		<div></div>
+		<label id='latlong'></label>
+		<select onclick="OptionsChanged();" id="type" name="type">
 			<option value="numeric">d.ddd d.ddd</option>
 			<option value="d">NS d.ddd EW d.ddd</option>
 			<option value="dm">NS d m.mmm' EW d m.mmm'</option>

@@ -53,7 +53,7 @@ function placeCircle(location) {
 	var radius = parseFloat(document.getElementById("radius").value);
 	var selectedUnit = document.getElementById("units").selectedIndex;
 	radius = radius / unitArray[selectedUnit] * unitArray[2];
-	var color = document.getElementById("color").value;	
+	var color = document.getElementById("colorValue").value;	
 	var circle = {
 			strokeColor: color,
 			strokeOpacity: 0.10,

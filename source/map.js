@@ -136,6 +136,7 @@ function ClearMarkers() {
 		markers[i].setMap(null);
 		markers[i].circle.setMap(null);
 	}
+	markers.length = 0;
 	
 	ClearCookies();
 }

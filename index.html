@@ -31,9 +31,12 @@
 			form#location { position: absolute; bottom: 15px; right: 50px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
 			form#location label { padding: 10px 10px; }
 			form#location em { margin: 0 10px; color: #666; }
+			
+			button#clear { position: absolute; top: 30px; left: 90px; background: #fff; border: 2px solid #666; padding: 3px 5px; }
 		</style> 
 		<script type="text/javascript" src="./source/jscolor/jscolor.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="./source/map.js"></script>
   </head>
   <body>
@@ -60,6 +63,7 @@
 			<option value="dms">NS d m' s" EW d m' s"</option>
 		</select>	
 	</form>
+	<button id="clear" onclick="ClearMarkers();" type="button">Clear</button>
   </body>
 </html>
 </html>

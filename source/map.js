@@ -3,6 +3,10 @@ google.maps.visualRefresh = true;
 var map;
 var coordsType = 'd';
 
+var maxMarkers = 50;
+var markers = [];
+var markerNamePrefix = 'marker';
+
 function initialize() {
 	var mapOptions = {
 	zoom: 10,
@@ -24,7 +28,6 @@ function initialize() {
 	google.maps.event.addListener(map, 'click', function(event) {
 		placeCircle(event.latLng);
 	});
-
 	
 	DisplayCoords();
 	google.maps.event.addListener(map, 'center_changed', DisplayCoords);
@@ -40,7 +43,78 @@ function initialize() {
     crosshairs.style.left = ( ( div.clientWidth - 19) / 2 ) + 'px';
     crosshairs.style.zIndex = '500';
 	crosshairs.onclick = circleAtCenter;
-    div.appendChild(crosshairs);	
+    div.appendChild(crosshairs);
+	
+	GetMarkersFromCookies();
+}
+
+function GetMarkersFromCookies() {
+	for (var i = 0; i < maxMarkers; i++) {
+		var markerName = markerNamePrefix + i;
+		var markerValue = GetMarkerValue(markerName);
+		
+		if (markerValue != null) {
+			LoadMarker(markerValue);
+		}
+	}
+}
+
+function GetMarkerValue(markerName) {
+	try {
+		var value = localStorage[markerName];
+		if (value) {
+			return value;
+		}
+	}
+	catch(e) {
+	}
+}
+
+function LoadMarker(markerValue) {
+	var parts = markerValue.split("|");
+	var lat = parts[0];
+	var lng = parts[1];
+	var pos = new google.maps.LatLng(lat,lng);
+	var radius = parseFloat(parts[2]);
+	var color = parts[3];
+	var tag = parts[4];	
+	
+	createCircleAndMarker(color, pos, radius, tag);			
+}
+
+function SaveMarkers() {
+	for (var i = 0; i < markers.length; i++) {
+		var marker = markers[i];
+		var markerValue = marker.getPosition().lat().toFixed(5) + '|' + marker.getPosition().lng().toFixed(5) + '|' + marker.radius + '|' + marker.color + '|' + marker.title;
+		
+		try {
+			localStorage[markerNamePrefix + i] = markerValue;
+		}
+		catch(e) {
+		}
+	}	
+}
+
+function ClearCookies(){
+	var beginningOfTime='Thu, 01-Jan-1970 00:00:00 GMT';	
+	for (var i = 0; i < maxMarkers; i++) {
+		var markerName = markerNamePrefix + i;
+		try {
+			delete localStorage[markerName];
+		}
+		catch(e) { 
+		}
+		document.cookie=markerName+'=; path=/; expires='+beginningOfTime;
+	}
+}
+
+function ClearMarkers() {	
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+		markers[i].circle.setMap(null);
+	}
+	
+	ClearCookies();
 }
 
 function circleAtCenter() {
@@ -48,28 +122,41 @@ function circleAtCenter() {
 }
 
 function placeCircle(location) {
-	var pos = new google.maps.LatLng(location);
-	var unitArray = [3963.1676,6378.1,6378100];
-	var radius = parseFloat(document.getElementById("radius").value);
-	var selectedUnit = document.getElementById("units").selectedIndex;
-	radius = radius / unitArray[selectedUnit] * unitArray[2];
-	var color = document.getElementById("colorValue").value;	
+	if (markers.length < maxMarkers) {
+		var unitArray = [3963.1676,6378.1,6378100];
+		var radius = parseFloat(document.getElementById("radius").value);
+		var selectedUnit = document.getElementById("units").selectedIndex;
+		radius = radius / unitArray[selectedUnit] * unitArray[2];
+		var color = document.getElementById("colorValue").value;	
+		var tag = document.getElementById("tag").value;
+		
+		createCircleAndMarker(color, location, radius, tag);		
+		SaveMarkers();
+	}
+}
+
+function createCircleAndMarker(color, pos, radius, tag) {
 	var circle = {
-			strokeColor: color,
-			strokeOpacity: 0.10,
-			strokeWeight: 1,
-			fillColor: color,
-			fillOpacity: 0.10,
-			map: map,
-			center: location,
-			radius: radius,
-			clickable: true,
-		};	
+		strokeColor: color,
+		strokeOpacity: 0.10,
+		strokeWeight: 1,
+		fillColor: color,
+		fillOpacity: 0.10,
+		map: map,
+		center: pos,
+		radius: radius,
+		clickable: true,
+	};	
 	newCircle = new google.maps.Circle(circle);	
 	google.maps.event.addListener(newCircle, 'rightclick', function(event) {
-		this.marker.setMap(null);
-        this.setMap(null);
-    });
+		var index = $.inArray(this.marker, markers)
+		markers[index].setMap(null);
+		markers.splice(index, 1);			
+		this.setMap(null);
+		
+		ClearCookies();
+		SaveMarkers();
+	});
 	google.maps.event.addListener(newCircle, 'click', function(event) {
 		placeCircle(event.latLng);
 	});
@@ -77,16 +164,24 @@ function placeCircle(location) {
 	var marker = new google.maps.Marker({
 		position: newCircle.center,
 		map: map,
-		title: document.getElementById("tag").value,
+		title: tag,
 	});
 	marker.circle = newCircle;
+	marker.color = newCircle.fillColor,
+	marker.radius = newCircle.radius,
 	
 	google.maps.event.addListener(marker, 'rightclick', function(event) {
 		this.circle.setMap(null);
-        this.setMap(null);
-	});
-	
-	newCircle.marker = marker;
+		
+		var index = $.inArray(this, markers)
+		markers[index].setMap(null);
+		markers.splice(index, 1);
+					
+		ClearCookies();
+		SaveMarkers();
+	});		
+	newCircle.marker = marker;		
+	markers.push(marker);
 }
 
 function OptionsChanged() {

@@ -69,8 +69,9 @@ function GetCoordsFromCookies() {
 	}
 	catch(e) {
 	}
-	DisplayCoords();
+	
 	document.getElementById("type").value = coordsType;
+	DisplayCoords();
 }
 
 function SaveCoords() {
@@ -208,8 +209,7 @@ function createCircleAndMarker(color, pos, radius, tag) {
 
 function OptionsChanged() {
 	coordsType = document.getElementById("type").value;
-	DisplayCoords()
-	
+	DisplayCoords();	
 	SaveCoords();
 }
 

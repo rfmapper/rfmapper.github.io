@@ -29,7 +29,6 @@ function initialize() {
 		placeCircle(event.latLng);
 	});
 	
-	DisplayCoords();
 	google.maps.event.addListener(map, 'center_changed', DisplayCoords);
 	
 	var div = map.getDiv();
@@ -46,6 +45,7 @@ function initialize() {
     div.appendChild(crosshairs);
 	
 	GetMarkersFromCookies();
+	GetCoordsFromCookies();
 }
 
 function GetMarkersFromCookies() {
@@ -56,6 +56,28 @@ function GetMarkersFromCookies() {
 		if (markerValue != null) {
 			LoadMarker(markerValue);
 		}
+	}
+}
+
+function GetCoordsFromCookies() {
+	try {
+		var value = localStorage["coords"];
+		if (value)
+		{
+			coordsType = value;
+		}
+	}
+	catch(e) {
+	}
+	DisplayCoords();
+	document.getElementById("type").value = coordsType;
+}
+
+function SaveCoords() {
+	try {
+		localStorage["coords"] = coordsType;
+	}
+	catch(e) {
 	}
 }
 
@@ -187,6 +209,8 @@ function createCircleAndMarker(color, pos, radius, tag) {
 function OptionsChanged() {
 	coordsType = document.getElementById("type").value;
 	DisplayCoords()
+	
+	SaveCoords();
 }
 
 function DisplayCoords() {

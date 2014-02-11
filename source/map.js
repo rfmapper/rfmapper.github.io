@@ -151,7 +151,7 @@ function placeCircle(location) {
 		var radius = parseFloat(document.getElementById("radius").value);
 		var selectedUnit = document.getElementById("units").selectedIndex;
 		radius = radius / unitArray[selectedUnit] * unitArray[2];
-		var color = document.getElementById("colorValue").value;	
+		var color = document.getElementById("color").value;	
 		var tag = document.getElementById("tag").value;
 		
 		createCircleAndMarker(color, location, radius, tag);		
